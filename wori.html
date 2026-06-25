@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Statement</title>
+    <style>
+        /* ─── RESET & BASE ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url(./bbb.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif, Arial, Helvetica, sans-serif;
+            padding: 2rem 1rem;
+            color: #1a2634;
+            display: flex;
+            justify-content: center;
+        }
+
+        .statement {
+            max-width: 1000px;
+            width: 100%;
+            padding: 2.5rem 2.5rem 2rem;
+            transition: all 0.2s;
+        }
+
+        /* ─── HEADER ─── */
+        .bank-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bank-brand {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 5px;
+            width: auto;
+            overflow: hidden;
+        }
+        img {
+            width: 55px;
+            height: 55px;
+        }
+        .sub {
+            font-size: 40px;
+            font-weight: 700;
+            color: lch(41.21% 46.3 276.24);
+        }
+        .bank-header .account-infor {
+            width: auto;
+            display: grid;
+            justify-content: end;
+           
+        }
+        .account-infor .ac-1 {
+            color: lch(41.21% 46.3 276.24);
+            font-weight: 500;
+            font-size: 23px;
+            text-align: end;
+            padding-bottom: 5px;
+        }
+        .ruler {
+            background-color: lch(41.21% 46.3 276.24);
+            border: 0.5px solid lch(41.21% 46.3 276.24);
+            width: 100%;
+        }
+        .account-infor .ac-2 {
+            color: lch(41.21% 46.3 276.24);
+            font-weight: 500;
+            font-size: 20px;
+            text-align: end;
+        }
+        .acount-01 {
+            display: flex;
+            justify-content: end;
+            gap: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+         .acount-01 .account-infor1 {
+            text-align: start;
+         }
+          .acount-01 .account-infor2 {
+            text-align: end;
+         }
+
+        /* ─── TABLE ─── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 500px;
+        }
+
+        .table-wrapper thead {
+            border-bottom: 0.7px solid hsl(0, 0%, 8%);
+            background: #248dd3;
+        }
+
+        .table-wrapper thead th {
+            padding: 0.2rem 2rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            color: #f8f7f7;
+            top: 0;
+            
+        }
+
+        /* Align Balance header to the right */
+        .table-wrapper thead th:last-child {
+            text-align: right;
+        }
+
+        .table-wrapper tbody tr {
+            border-bottom: 0.7px solid gray;
+            transition: background 0.1s;
+        }
+        .table-wrapper tbody td {
+            padding: 0.5rem 0.5rem;
+            vertical-align: middle;
+            color: black;
+            font-weight: 400;
+        }
+
+        .table-wrapper tbody td .desc {
+            font-weight: 400;
+        }
+
+        .table-wrapper tbody td .balance-col {
+            font-weight: 400;
+            font-variant-numeric: tabular-nums;
+            color: #000000;
+            text-align: right; /* Right-align balance values */
+            display: block;
+            width: 100%;
+        }
+
+        /* Align Balance data cells to the right */
+        .table-wrapper tbody td:last-child {
+            text-align: right;
+        }
+
+        /* ─── FOOTER ─── */
+        .statement-footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            padding-top: 1.25rem;
+            font-size: 0.8rem;
+            color: gray;
+        }
+
+        .statement-footer .note {
+            font-style: arial;
+            color: #248dd3;
+        }
+
+        .statement-footer .generated {
+            text-align: right;
+            color: transparent;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .statement {
+                padding: 1.25rem;
+            }
+            .bank-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .statement {
+                padding: 0.75rem;
+                border-radius: 16px;
+            }
+            .table-wrapper table {
+                font-size: 0.8rem;
+                min-width: 420px;
+            }
+            .table-wrapper thead th,
+            .table-wrapper tbody td {
+                padding: 0.4rem 0.6rem;
+            }
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 10px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: hsl(213, 54%, 51%);
+            border-radius: 10px;
+        }
+       
+    </style>
+</head>
+<body>
+
+    <div class="statement" id="statement">
+
+        <!-- ─── HEADER ─── -->
+        <div class="bank-header">
+            <div class="bank-brand">
+                <img src="./WF-f6e6a56c.png">
+                <i><span class="sub">WOORI BANK</span></i>
+            </div>
+            <div>
+                <div class="account-infor">
+                    <div class="ac-1">Account Statement</div>
+                    <div class="ruler"></div>
+                    <div class="ac-2">Account Information</div>
+                    <div class="acount-01">
+                        <div class="account-infor1">
+                            <span><p>CID</p></span>
+                            <span><p>Account Number</p></span>
+                            <span><p>Account Name</p></span>
+                            <span><p>Total Balance</p></span>
+                            <span><p>Available Balance</p></span>
+                            <span><p>Statement Date</p></span>
+                            <span><p>Statement Period</p></span>
+                        </div>
+                        <div class="account-infor2">
+                            <span><p>5877724</p></span>
+                            <span><p>32572154</p></span>
+                            <span><p>NHEN SOPHORN</p></span>
+                            <span><p>417,016,750 KHR</p></span>
+                            <span><p>16,309,589 KHR</p></span>
+                            <span><p>25-Jun-26</p></span>
+                            <span><p>6 Months</p></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+
+        <!-- ─── TRANSACTION TABLE ─── -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="min-width:120px;">Date</th>
+                        <th style="min-width:280px;">Transaction Description</th>
+                        <th style="min-width:180px; text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="txBody">
+                    <!-- rows injected by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ─── FOOTER ─── -->
+        <div class="statement-footer">
+            <div class="note">
+               <p>Note this is Unofficial statement generated from mobile banking. For official doccument, please visite any Woori Bank Branches</p>
+            </div>
+            <div class="generated">
+                Generated: <span id="genDate"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DATA GENERATION
+        //  Credit: 100,000-400,000 (25/day)
+        //  Debit:  5,000,000-6,000,000 (1/day)
+        //  Sorted: newest first (01-Jan-26 at bottom)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        (function() {
+            const startDate = new Date(2026, 0, 1);
+            const endDate = new Date(2026, 5, 25);
+            const creditsPerDay = 25;
+            const debitsPerDay = 1;
+            const initialBalance = 1250000;
+
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            function formatDate(d) {
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = monthNames[d.getMonth()];
+                const year = String(d.getFullYear()).slice(-2);
+                return `${day}-${month}-${year}`;
+            }
+
+            function randomAmount(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            function generateTransactions() {
+                let transactions = [];
+                let currentDate = new Date(startDate);
+                let runningBalance = initialBalance;
+                let index = 0;
+
+                while (currentDate <= endDate) {
+                    const dateStr = formatDate(currentDate);
+
+                    // --- SPECIAL CASE: 01-Jan-26 ---
+                    if (dateStr === '01-Jan-26') {
+                        const creditAmount = 2300000;
+                        runningBalance += creditAmount;
+                        transactions.push({
+                            id: ++index,
+                            date: dateStr,
+                            description: 'Received From Bakong Member',
+                            delta: creditAmount
+                        });
+
+                        const debitAmount = 2000000;
+                        runningBalance -= debitAmount;
+                        transactions.push({
+                            id: ++index,
+                            date: dateStr,
+                            description: 'Fund Transfer to Bakong Member',
+                            delta: -debitAmount
+                        });
+
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        continue;
+                    }
+
+                    // --- NORMAL DAY: 25 Credits ---
+                    for (let i = 0; i < creditsPerDay; i++) {
+                        const amount = randomAmount(150000, 500000);
+                        runningBalance += amount;
+                        transactions.push({
+                            id: ++index,
+                            date: dateStr,
+                            description: 'Received From Bakong Member',
+                            delta: amount
+                        });
+                    }
+
+                    // --- NORMAL DAY: 1 Debit ---
+                    for (let i = 0; i < debitsPerDay; i++) {
+                        const amount = randomAmount(5000000, 6500000);
+                        runningBalance -= amount;
+                        transactions.push({
+                            id: ++index,
+                            date: dateStr,
+                            description: 'Fund Transfer to Bakong Member',
+                            delta: -amount
+                        });
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                return transactions;
+            }
+
+            let data = generateTransactions();
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            //  REVERSE ORDER: newest first (01-Jan-26 at bottom)
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            data.reverse();
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            //  RENDER
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+            const tbody = document.getElementById('txBody');
+            let html = '';
+
+            data.forEach((tx) => {
+                let displayBalance = '';
+                const amount = tx.delta;
+
+                if (amount > 0) {
+                    displayBalance = `+${amount.toLocaleString()} KHR`;
+                } else if (amount < 0) {
+                    displayBalance = `${amount.toLocaleString()} KHR`;
+                }
+
+                html += `
+                    <tr>
+                        <td>${tx.date}</td>
+                        <td><span class="desc">${tx.description}</span></td>
+                        <td><span class="balance-col">${displayBalance}</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            // Set generated date
+            document.getElementById('genDate').textContent = new Date().toLocaleString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
